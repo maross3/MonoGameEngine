@@ -13,10 +13,12 @@ namespace TestMonogame
 {
     // disconnected database because .txt was not found in bin, need to automate that
     // TODO:
-    // camera script
+    // transfer camera code to component, main camera in scene
+    // Make the environment stay still
+    // parent player on transform and make sure camera parenting/following works
+    // dev path-finding pipeline in environment chunks
     // quad tree environment
     // path finding using quad tree
-    // pathfinding using user generated grid
     // physics
     // building:
     // art for build icon
@@ -107,7 +109,8 @@ namespace TestMonogame
                 (int)(GraphicsDevice.DisplayMode.Height * (maxZoomScale * CameraScale)));
 
 
-            GameWindowBounds = new Rectangle(0,0, GraphicsDevice.Viewport.Width * (int)(maxZoomScale * CameraScale), 
+            GameWindowBounds = new Rectangle(0,0, 
+                GraphicsDevice.Viewport.Width * (int)(maxZoomScale * CameraScale), 
                 GraphicsDevice.Viewport.Height * (int)(maxZoomScale * CameraScale));
 
             // GameWindowBounds = Window.ClientBounds;

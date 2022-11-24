@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +26,7 @@ namespace TestMonogame.Components
 
         public Player(Dictionary<PlayerAnimationState, Texture2D[]> frames)
         {
+            Texture = frames.First().Value.First();
             InitializeTransform();
             SetUpAnimation(frames);
             SetupInput();
@@ -32,11 +34,12 @@ namespace TestMonogame.Components
 
         private void InitializeTransform()
         {
-            Transform.Position = new Vector2(
-                Game1.GameWindowBounds.Width / 2,
-                Game1.GameWindowBounds.Height / 2);
-
             Transform.Scale = new Vector2(2, 2);
+            Transform.Position = new Vector2(
+                Game1.GameWindowBounds.Width / 2 - Bounds.Width / 2,
+                Game1.GameWindowBounds.Height / 2 -  Bounds.Height / 2);
+
+            
         }
 
         private void SetupInput()
