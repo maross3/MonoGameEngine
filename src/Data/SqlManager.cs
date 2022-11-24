@@ -15,6 +15,7 @@ public class SqlManager
 
     private async void ConnectSqlAsync()
     {
+
         var cs = await File.ReadAllTextAsync("./database.txt");
         _connection = new NpgsqlConnection(cs);
         _connection.Open();

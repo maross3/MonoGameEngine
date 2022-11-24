@@ -33,8 +33,8 @@ namespace TestMonogame.Components
         private void InitializeTransform()
         {
             Transform.Position = new Vector2(
-                Game1.GameWindowBounds.X / 2,
-                Game1.GameWindowBounds.Y / 2);
+                Game1.GameWindowBounds.Width / 2,
+                Game1.GameWindowBounds.Height / 2);
 
             Transform.Scale = new Vector2(2, 2);
         }

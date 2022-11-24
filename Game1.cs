@@ -1,13 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TestMonogame.Components;
 using TestMonogame.Data;
+using TestMonogame.src.Components;
 using TestMonogame.System;
 
 namespace TestMonogame
 {
+    // disconnected database because .txt was not found in bin, need to automate that
+    // TODO:
+    // camera script
+    // quad tree environment
+    // path finding using quad tree
+    // pathfinding using user generated grid
+    // physics
+    // building:
+    // art for build icon
+    // build menu
+    // placement system (valid and invalid)
+    // pathfind to build site
+    // idle while building, move cancels
+
     public class Game1 : Game
     {
         // abstrct
@@ -73,10 +90,28 @@ namespace TestMonogame
             _systems.Add(environmentSystem);
         }
 
+        public SpriteBatch targetBatch;
+        private RenderTarget2D _target;
+        public static float CameraScale = 1f;
+        private static float maxZoomScale = 2f;
+        private static float minZoomScale = 1f;
+
+
+
         protected override void Initialize()
         {
-            GameWindowBounds = Window.ClientBounds;
-            database = new SqlManager();
+            targetBatch = new SpriteBatch(GraphicsDevice);
+
+            _target = new RenderTarget2D(GraphicsDevice,
+                (int)(GraphicsDevice.DisplayMode.Width * (maxZoomScale * CameraScale)),
+                (int)(GraphicsDevice.DisplayMode.Height * (maxZoomScale * CameraScale)));
+
+
+            GameWindowBounds = new Rectangle(0,0, GraphicsDevice.Viewport.Width * (int)(maxZoomScale * CameraScale), 
+                GraphicsDevice.Viewport.Height * (int)(maxZoomScale * CameraScale));
+
+            // GameWindowBounds = Window.ClientBounds;
+            // database = new SqlManager();
             _systems = new List<BaseSystem>();
 
             CreateInputSystem();
@@ -97,13 +132,18 @@ namespace TestMonogame
             progressBarOneFront = Content.Load<Texture2D>("./ProgressBar Light Blue/V1/Background Bar");
             progressBarOneBack = Content.Load<Texture2D>("./ProgressBar Light Blue/V1/Foreground");
             pixelFloorTest = Content.Load<Texture2D>("pixelFloorTest");
-            
+
             AnimationDictionaryBuilder.LoadPlayerFrames(this);
         }
 
         protected override void Update(GameTime gameTime)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.N) && CameraScale > minZoomScale) 
+                CameraScale -= 0.01f;
+            else if (Keyboard.GetState().IsKeyDown(Keys.M) && CameraScale < maxZoomScale) 
+                CameraScale += 0.01f;
             foreach (var sys in _systems) sys.Update(gameTime);
+
             player.Update(gameTime);
             base.Update(gameTime);
         }
@@ -111,11 +151,26 @@ namespace TestMonogame
         protected override void Draw(GameTime gameTime)
         {
             // need an environment drawing system
-            GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            //render target to back buffer
+            GraphicsDevice.SetRenderTarget(_target);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+
             foreach (var sys in _systems) sys.Draw(_spriteBatch);
+
             _spriteBatch.End();
+            GraphicsDevice.SetRenderTarget(null);
+
+            targetBatch.Begin();
+            targetBatch.Draw(_target, new Rectangle(
+                (int)(GraphicsDevice.DisplayMode.Width * (1 - CameraScale)) / 5,
+                (int)(GraphicsDevice.DisplayMode.Height * (1 - CameraScale)) / 5,
+                (int) (GraphicsDevice.DisplayMode.Width * CameraScale),
+                (int) (GraphicsDevice.DisplayMode.Height * CameraScale)), Color.White);
+            
+            targetBatch.End();
+
 
             base.Draw(gameTime);
         }
