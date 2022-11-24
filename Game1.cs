@@ -167,8 +167,8 @@ namespace TestMonogame
 
             targetBatch.Begin();
             targetBatch.Draw(_target, new Rectangle(
-                (int)(GraphicsDevice.DisplayMode.Width * (1 - CameraScale)) / 5,
-                (int)(GraphicsDevice.DisplayMode.Height * (1 - CameraScale)) / 5,
+              (int)(GraphicsDevice.DisplayMode.Width * (1 - CameraScale)) / 5,
+                (int)(GraphicsDevice.DisplayMode.Height * (1 - CameraScale)) / 5 ,
                 (int) (GraphicsDevice.DisplayMode.Width * CameraScale),
                 (int) (GraphicsDevice.DisplayMode.Height * CameraScale)), Color.White);
             

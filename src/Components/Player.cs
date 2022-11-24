@@ -81,8 +81,13 @@ namespace TestMonogame.Components
             _anim.UpdateFrameSpeed(IDLE_ANIM_SPEED);
         }
 
+        private PlayerAnimationState _animState;
         private void SetPlayerMoving(PlayerAnimationState state)
         {
+
+            if (_animState == state) return;
+
+            _animState = state;
             if (state == PlayerAnimationState.MoveLeft) _moveLeft = true;
             if (state == PlayerAnimationState.MoveRight) _moveLeft = false;
 
@@ -91,12 +96,53 @@ namespace TestMonogame.Components
             _anim.UpdateFrameSpeed(WALK_ANIM_SPEED);
         }
 
+        private float _speed = 2f;
         public override void Update(GameTime gameTime)
         {
-            if (_input.GetKeyDown(Keys.A)) SetPlayerMoving(PlayerAnimationState.MoveLeft);
-            else if (_input.GetKeyDown(Keys.D)) SetPlayerMoving(PlayerAnimationState.MoveRight);
-            else if (_input.GetKeyDown(Keys.S)) SetPlayerMoving(PlayerAnimationState.MoveDown);
-            else if (_input.GetKeyDown(Keys.W)) SetPlayerMoving(PlayerAnimationState.MoveUp);
+            if (_input.GetKeyDown(Keys.W) && _input.GetKeyDown(Keys.A))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveLeft);
+                Transform.MoveUpBy(_speed * 0.75f);
+                Transform.MoveLeftBy(_speed * 0.75f);
+            }
+            else if (_input.GetKeyDown(Keys.W) && _input.GetKeyDown(Keys.D))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveRight);
+                Transform.MoveUpBy(_speed * 0.75f);
+                Transform.MoveRightBy(_speed * 0.75f);
+            }
+            else if (_input.GetKeyDown(Keys.S) && _input.GetKeyDown(Keys.D))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveRight);
+                Transform.MoveDownBy(_speed * 0.75f);
+                Transform.MoveRightBy(_speed * 0.75f);
+            }
+            else if (_input.GetKeyDown(Keys.S) && _input.GetKeyDown(Keys.A))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveLeft);
+                Transform.MoveDownBy(_speed * 0.75f);
+                Transform.MoveLeftBy(_speed * 0.75f);
+            }
+            else if (_input.GetKeyDown(Keys.A))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveLeft);
+                Transform.MoveLeftBy(_speed);
+            }
+            else if (_input.GetKeyDown(Keys.D))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveRight);
+                Transform.MoveRightBy(_speed);
+            }
+            else if (_input.GetKeyDown(Keys.S))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveDown);
+                Transform.MoveDownBy(_speed);
+            }
+            else if (_input.GetKeyDown(Keys.W))
+            {
+                SetPlayerMoving(PlayerAnimationState.MoveUp);
+                Transform.MoveUpBy(_speed);
+            }
             else SetPlayerIdle();
         }
     }

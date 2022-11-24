@@ -81,11 +81,7 @@ namespace TestMonogame.Entities
         public override void Update(GameTime gameTime)
         {
             var time = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (input.GetKeyDown(Keys.A)) mainEnvironment.MoveRightBy(_speed * time);
-            if (input.GetKeyDown(Keys.D)) mainEnvironment.MoveLeftBy(_speed * time);
-            if (input.GetKeyDown(Keys.S)) mainEnvironment.MoveUpBy(_speed * time);
-            if (input.GetKeyDown(Keys.W)) mainEnvironment.MoveDownBy(_speed * time);
-        }
+                  }
 
         public override void Draw(SpriteBatch batch)
         {
